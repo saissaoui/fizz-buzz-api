@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  api:
+    build: .
+    ports:
+      - "5000:8080"
+  redis:
+    container_name: redis-fizz
+    image: redis:7.0
+    ports:
+      - "6379:6379"
+    command: redis-server      
