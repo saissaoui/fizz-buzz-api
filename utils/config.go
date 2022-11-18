@@ -8,6 +8,7 @@ import (
 
 var errors []error
 
+// The application congif wrapper
 type AppConfig struct {
 	Port          int
 	Environment   string
@@ -34,11 +35,13 @@ func LoadConfig() AppConfig {
 	return cfg
 }
 
+//Gets an en variable as string, with a default value if no value found
 func getStringWithDefault(key, defaultValue string) string {
 	viper.SetDefault(key, defaultValue)
 	return viper.GetString(key)
 }
 
+//Gets an en variable as int, with a default value if no value found
 func getIntWithDefault(key string, defaultValue int) int {
 	viper.SetDefault(key, defaultValue)
 	return viper.GetInt(key)

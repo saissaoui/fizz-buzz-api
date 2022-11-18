@@ -10,6 +10,7 @@ import (
 	"github.com/go-redis/redis/v7"
 )
 
+// Redis connector
 type RedisClient struct {
 	*redis.Client
 	mux sync.Mutex
@@ -38,12 +39,14 @@ func NewClient(config utils.AppConfig) (*RedisClient, error) {
 	}, nil
 }
 
+// Writes in redis DB by doing a hset request
 func (c *RedisClient) Write(key, field string, value interface{}) error {
 	c.mux.Lock()
 	defer c.mux.Unlock()
 	return c.Client.HSet(key, field, value).Err()
 }
 
+// Reads from redis by doing a hget
 func (c *RedisClient) Read(key, field string) (string, error) {
 	result, err := c.Client.HGet(key, field).Result()
 	if err != nil {
@@ -52,6 +55,7 @@ func (c *RedisClient) Read(key, field string) (string, error) {
 	return result, nil
 }
 
+// Gets alls fields stored in redis under a key
 func (c *RedisClient) GetFields(key string) ([]string, error) {
 	result, err := c.Client.HKeys(key).Result()
 	if err != nil {
@@ -60,6 +64,7 @@ func (c *RedisClient) GetFields(key string) ([]string, error) {
 	return result, nil
 }
 
+// checks if redis is up
 func (c *RedisClient) Ping() *redis.StatusCmd {
 	return c.Client.Ping()
 }

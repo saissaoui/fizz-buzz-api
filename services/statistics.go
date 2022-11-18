@@ -9,23 +9,30 @@ import (
 	"github.com/pkg/errors"
 )
 
-type StatisticsService struct {
+//go:generate mockery --name=StatisticsService --output ./../mocks --case=underscore
+
+type StatisticsService interface {
+	GetStatistics() (*models.StatisticsResponse, error)
+	CountRequest(request *models.FizzBuzzRequest) error
+}
+type StatisticsServiceImpl struct {
 	RedisClient *connectors.RedisClient
 }
 
 // InitStatisticsService initialises a new StatisticsService
-func InitStatisticsService(config utils.AppConfig) (*StatisticsService, error) {
+func InitStatisticsService(config utils.AppConfig) (*StatisticsServiceImpl, error) {
 	redisClient, err := connectors.NewClient(config)
 
 	if err != nil {
 		return nil, errors.Wrap(err, "InitStatisticsService")
 	}
-	return &StatisticsService{
+	return &StatisticsServiceImpl{
 		RedisClient: redisClient,
 	}, nil
 }
 
-func (s StatisticsService) GetStatistics() (resp *models.StatisticsResponse, err error) {
+// Gets the requests statistics from redis
+func (s StatisticsServiceImpl) GetStatistics() (resp *models.StatisticsResponse, err error) {
 	// check redis availability
 	if err = s.RedisClient.Ping().Err(); err != nil {
 		return
@@ -54,7 +61,7 @@ func (s StatisticsService) GetStatistics() (resp *models.StatisticsResponse, err
 }
 
 // CountRequest add a new request to count or increase counting for an already requested combination
-func (s StatisticsService) CountRequest(request *models.FizzBuzzRequest) error {
+func (s StatisticsServiceImpl) CountRequest(request *models.FizzBuzzRequest) error {
 
 	// check redis availability
 	if err := s.RedisClient.Ping().Err(); err != nil {

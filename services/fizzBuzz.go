@@ -7,10 +7,17 @@ import (
 	"github.com/pkg/errors"
 )
 
-type FizzBuzzService struct {
+//go:generate mockery --name=FizzBuzzService --output ./../mocks --case=underscore
+
+type FizzBuzzService interface {
+	ComputeFizzBuzz(request *models.FizzBuzzRequest) ([]string, error)
 }
 
-func (service FizzBuzzService) ComputeFizzBuzz(request *models.FizzBuzzRequest) (result []string, err error) {
+type FizzBuzzServiceImpl struct {
+}
+
+//ComputeFizzBuzz computes the fizz buzz repsonse for a given request (int1, int3, limit, str1, str2)
+func (service FizzBuzzServiceImpl) ComputeFizzBuzz(request *models.FizzBuzzRequest) (result []string, err error) {
 	if *request.Limit <= 0 {
 		err = errors.New("Limit not valid, must be greater than zero")
 		return

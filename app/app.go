@@ -21,6 +21,7 @@ func New() *App {
 	return app
 }
 
+// Setup the server by loading config an initializing services
 func (app *App) setup() {
 
 	// Load configuration
@@ -37,6 +38,7 @@ func (app *App) setup() {
 
 }
 
+// Run the application server
 func (app *App) Run() {
 
 	// Serving application
