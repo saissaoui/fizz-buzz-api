@@ -34,7 +34,29 @@ with body :
 ```
 GET /statistics
 ```
-
+returns : 
+```
+{
+    "stats": [
+        {
+            "request": "{int1: 2, int2: 3, limit: 20, str1: fizz, str2 : buzz }",
+            "count": 13
+        },
+        {
+            "request": "{int1: 2, int2: 3, limit: 20, str1: fiee, str2 : burr }",
+            "count": 2
+        },
+        {
+            "request": "{int1: 2, int2: 3, limit: 20, str1: t, str2 : f }",
+            "count": 4
+        },
+        {
+            "request": "{int1: 2, int2: 10, limit: 10, str1: Two, str2 : Ten }",
+            "count": 1
+        }
+    ]
+}
+```
 ## Dev : 
 
 ### Requirements
